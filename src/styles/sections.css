@@ -1,0 +1,97 @@
+/* ── Cabeçalho (estrutura base; aparência da landing em landing.css) ── */
+.sitehead {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgba(252, 252, 252, .86);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--fast), background var(--fast);
+}
+
+.sitehead.compact { border-bottom-color: var(--ink-hair); }
+
+.siteheadinner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--gutter);
+  height: var(--header-h);
+  transition: height var(--fast);
+}
+
+.sitehead.compact .siteheadinner { height: var(--header-h-compact); }
+
+.siteheadname {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  min-height: 44px;
+  padding-block: 10px;
+  text-decoration: none;
+}
+
+.siteheadname .headname {
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+}
+
+.siteheadname .headrole { transition: opacity var(--fast); }
+.sitehead.compact .siteheadname .headrole { opacity: 0; }
+
+.siteheadnav { display: flex; justify-content: center; gap: 28px; }
+
+.siteheadnav a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  color: var(--ink-sub);
+  font-size: var(--fs-cap);
+  text-decoration: none;
+  transition: color var(--fast);
+}
+
+.siteheadnav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  height: 1px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--fast);
+}
+
+.siteheadnav a:hover { color: var(--ink); }
+.siteheadnav a:hover::after { transform: scaleX(1); }
+.siteheadnav a.current { color: var(--ink); }
+.siteheadnav a.current::after { background: var(--accent); transform: scaleX(1); }
+
+.siteheadside {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+@media (max-width: 860px) {
+  .siteheadinner { grid-template-columns: minmax(0, 1fr) auto; }
+  .siteheadnav { display: none; }
+  .siteheadname .headrole { display: none; }
+}
+
+/* ponto rosa ao lado do nome no cabeçalho */
+.headdot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pink);
+}

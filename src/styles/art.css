@@ -1,0 +1,114 @@
+/* ══════════════════════════════════════════════════════════════
+   SISTEMA VISUAL DE PONTOS + MOTIONS
+   Todas as imagens do site são desenhadas em SVG a partir do anel de
+   pontos do logotipo (src/lib/dots.js e src/parts/art/).
+   Motions:
+   - entrada: os pontos chegam ao lugar em grupos quando o desenho entra
+     na tela (uma vez só);
+   - rolagem: anéis giram conforme a seção atravessa a tela (--giro).
+   Com movimento reduzido tudo aparece pronto e parado.
+   ══════════════════════════════════════════════════════════════ */
+
+.arte {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.arte [data-p] {
+  --atraso: calc(var(--i, 0) * 140ms + var(--j, 0) * 22ms);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.arte [data-l] { stroke-dasharray: 1; }
+
+/* estado de partida: só existe com JS e com movimento permitido */
+.arte.is-preparado [data-p] {
+  opacity: 0;
+  transform: translate(var(--dx, 0px), var(--dy, 0px)) scale(.15);
+}
+
+.arte.is-preparado [data-l] { stroke-dashoffset: 1; }
+
+.arte.is-preparado.is-visivel [data-p] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity .6s ease var(--atraso),
+    transform 1.05s cubic-bezier(.16, 1, .3, 1) var(--atraso);
+}
+
+.arte.is-preparado.is-visivel [data-l] {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset .9s ease var(--atraso);
+}
+
+/* ── hero: anel do logo + rede de pessoas ───────────────────── */
+.hero-arte__anel,
+.hero-arte__rede,
+.hero-arte__luz {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+}
+
+.hero-arte__anel { transform: rotate(calc(var(--giro, 0) * 70deg)); }
+.hero-arte__rede { transform: rotate(calc(var(--giro, 0) * -28deg)); }
+
+.arte.is-preparado .hero-arte__luz { opacity: 0; transform: scale(.6); }
+
+.arte.is-preparado.is-visivel .hero-arte__luz {
+  opacity: 1;
+  transform: none;
+  transition: opacity 1.4s ease .3s, transform 1.6s cubic-bezier(.16, 1, .3, 1) .3s;
+}
+
+/* ── anel decorativo (manifesto, diagnóstico) ───────────────── */
+.anel-arte__g {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  transform: rotate(calc(var(--giro, 0) * 90deg));
+}
+
+/* ── painéis que recebem os emblemas ────────────────────────── */
+.lp-solcard__arte {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0;
+  padding: 8% 10%;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 70% 70% at 50% 48%, rgba(79, 143, 214, .26), transparent 70%),
+    linear-gradient(160deg, #123a6b 0%, #0d2c52 100%);
+}
+
+.lp-step__arte {
+  position: relative;
+  margin: 0;
+  padding: 6% 7%;
+  overflow: hidden;
+}
+
+.lp-step--1 .lp-step__arte { background: var(--paper-soft); }
+.lp-step--2 .lp-step__arte { background: #f8d3e4; }
+.lp-step--3 .lp-step__arte { background: #0a2140; }
+.lp-step--4 .lp-step__arte { background: #b3005e; }
+
+/* etapa com foto: a imagem preenche a metade do cartão */
+.lp-step__arte--foto { display: block; padding: 0; }
+
+.lp-step__arte--foto img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-arte__anel,
+  .hero-arte__rede,
+  .anel-arte__g { transform: none; }
+}
