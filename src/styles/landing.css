@@ -1,0 +1,903 @@
+/* ══════════════════════════════════════════════════════════════
+   LANDING — layout das seções
+   Direção (skill ui-ux-pro-max, padrão "Trust & Authority + Conversion"):
+   azul-noite como base de confiança, rosa só em CTA, números e palavras-chave;
+   promessa + prova no primeiro bloco; ritmo claro/escuro alternado:
+   hero (azul) → realidade e desafios (papel) → manifesto e soluções (azul)
+   → metodologia (papel) → antes/depois (neutro → rosa) → contato (azul).
+   ══════════════════════════════════════════════════════════════ */
+
+a[href],
+button,
+summary {
+  cursor: pointer;
+}
+
+.lp-skip {
+  position: fixed;
+  left: 16px;
+  top: 12px;
+  z-index: 80;
+  padding: 10px 16px;
+  border-radius: var(--radius-pill);
+  background: #fff;
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-160%);
+}
+
+.lp-skip:focus { transform: none; }
+
+/* link de "pular" que só aparece com foco de teclado (seções presas) */
+.lp-skipinline {
+  position: absolute;
+  left: 16px;
+  top: calc(var(--header-h) + 12px);
+  z-index: 6;
+  padding: 10px 16px;
+  border-radius: var(--radius-pill);
+  background: #fff;
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.lp-skipinline:focus {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── Cabeçalho fixo ─────────────────────────────────────────── */
+.sitehead {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: background .25s ease, border-color .25s ease;
+}
+
+.sitehead.compact {
+  background: rgba(251, 250, 252, .92);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-bottom-color: var(--ink-faint);
+}
+
+.sitehead.on-hero { --focus: var(--pink-light); }
+
+.sitehead.on-hero.is-scrolled {
+  background: rgba(10, 33, 64, .78);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-bottom-color: rgba(251, 250, 252, .08);
+}
+
+.sitehead.on-hero .headname,
+.sitehead.on-hero .siteheadnav a,
+.sitehead.on-hero .siteheadnav a.current,
+.sitehead.on-hero .siteheadnav a:hover {
+  color: #fff;
+}
+
+.sitehead.on-hero .headrole { color: rgba(255, 255, 255, .72); }
+.sitehead.on-hero .siteheadnav a::after { background: #fff; }
+.siteheadnav a { font-size: 14px; color: var(--ink-sub); }
+.siteheadnav a.current::after { background: var(--pink); }
+
+.navtoggle { display: none; }
+
+@media (max-width: 1080px) {
+  .siteheadnav { gap: 20px; }
+}
+
+@media (max-width: 860px) {
+  .navtoggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--ink-hair);
+    border-radius: 50%;
+    color: var(--ink);
+  }
+
+  .sitehead.on-hero .navtoggle {
+    border-color: rgba(255, 255, 255, .4);
+    color: #fff;
+  }
+
+  .navtoggle-bars,
+  .navtoggle-bars::before {
+    position: absolute;
+    left: 13px;
+    width: 16px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform .2s ease;
+  }
+
+  .navtoggle-bars { top: 17px; }
+  .navtoggle-bars::before { content: ""; left: 0; top: 7px; }
+
+  .navtoggle[aria-expanded="true"] .navtoggle-bars { transform: translateY(3.5px) rotate(45deg); }
+  .navtoggle[aria-expanded="true"] .navtoggle-bars::before { transform: translateY(-7px) rotate(-90deg); }
+
+  .siteheadside { gap: 10px; }
+
+  .sitehead.menu-open .siteheadnav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 8px var(--container-pad) 20px;
+    background: var(--paper);
+    border-bottom: 1px solid var(--ink-hair);
+    box-shadow: 0 24px 40px rgba(10, 33, 64, .14);
+  }
+
+  .sitehead.menu-open .siteheadnav a {
+    height: 52px;
+    color: var(--ink);
+    font-family: var(--display);
+    font-size: 18px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+
+  .sitehead.menu-open .siteheadnav a::after { display: none; }
+}
+
+@media (max-width: 420px) {
+  .headcta { display: none; }
+}
+
+/* ── Peças de texto compartilhadas ──────────────────────────── */
+.lp-title {
+  max-width: 18ch;
+  color: var(--blue-ink);
+  font-size: var(--fs-h2);
+  font-weight: 600;
+  letter-spacing: var(--ls-h2);
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.lp-title--light { color: #fff; }
+
+.lp-guide {
+  max-width: 46ch;
+  color: var(--ink-sub);
+  font-size: var(--fs-lead);
+  line-height: 1.6;
+}
+
+.lp-guide--light { color: var(--paper-sub); }
+
+.lp-head { margin-bottom: clamp(40px, 5vw, 72px); }
+
+.lp-head--split {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: var(--gutter) calc(var(--gutter) * 2);
+  align-items: end;
+}
+
+.lp-section { padding-block: var(--section-pad); }
+
+.lp-textlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: var(--blue-ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--pink);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  transition: color .2s ease;
+}
+
+.lp-textlink:hover { color: var(--pink-strong); }
+.lp-textlink--light { color: #fff; }
+.lp-textlink--light:hover { color: var(--pink-light); }
+
+.lp-source {
+  color: var(--ink-sub);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+/* ── 1. Hero: promessa + prova ──────────────────────────────── */
+.lp-hero {
+  --focus: var(--pink-light);
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  min-height: 100svh;
+  padding: calc(var(--header-h) + clamp(32px, 6vh, 72px)) 0 clamp(28px, 4vh, 44px);
+  overflow: clip;
+  background:
+    radial-gradient(ellipse 60% 70% at 88% 18%, rgba(21, 87, 155, .55), transparent 70%),
+    linear-gradient(160deg, var(--blue-ink) 0%, #0b2445 55%, #0f2f58 100%);
+  color: #fff;
+}
+
+.lp-hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+}
+
+.lp-hero__copy { animation: lp-rise .9s var(--ease-out) both; }
+
+
+.lp-hero__title {
+  max-width: 12ch;
+  color: #fff;
+  font-size: var(--fs-display);
+  font-weight: 600;
+  letter-spacing: var(--ls-display);
+  line-height: .98;
+  text-wrap: balance;
+}
+
+.lp-hero__lead {
+  max-width: 40ch;
+  margin-top: clamp(20px, 2.4vw, 28px);
+  color: var(--paper-body);
+  font-size: var(--fs-lead);
+  line-height: 1.6;
+}
+
+.lp-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 28px;
+  margin-top: clamp(28px, 3.2vw, 40px);
+}
+
+/* o anel do logotipo (HeroArte) ocupa a coluna da direita */
+.lp-hero__media {
+  justify-self: center;
+  width: 100%;
+  max-width: min(600px, calc(100svh - var(--header-h) - 220px));
+  aspect-ratio: 1;
+}
+
+/* números de prova na base do hero */
+.lp-tally {
+  margin-top: clamp(36px, 6vh, 64px);
+  padding-top: clamp(20px, 3vh, 28px);
+  border-top: 1px solid var(--paper-hair);
+}
+
+.lp-tally__list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px var(--gutter);
+  margin: 0;
+}
+
+.lp-tally__item {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.lp-tally__num {
+  margin: 0;
+  color: #fff;
+  font-family: var(--display);
+  font-size: clamp(30px, 3.2vw, 46px);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.04em;
+  line-height: 1;
+}
+
+.lp-tally__label {
+  color: var(--paper-sub);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+@keyframes lp-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ── 2. Realidade (papel) ───────────────────────────────────── */
+.lp-reality { background: var(--paper); }
+
+.lp-reality__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gutter) calc(var(--gutter) * 1.5);
+  margin: 0;
+}
+
+.lp-stat {
+  display: flex;
+  flex-direction: column;
+  padding-top: 24px;
+  border-top: 2px solid var(--blue-ink);
+}
+
+/* número antes do rótulo, sem trocar a ordem do texto */
+.lp-stat__label { order: 2; }
+.lp-stat__num { order: 1; }
+.lp-stat__text { order: 3; }
+
+.lp-stat__num {
+  margin: 0;
+  color: var(--pink);
+  font-family: var(--display);
+  font-size: clamp(64px, 8.4vw, 124px);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.055em;
+  line-height: .92;
+}
+
+.lp-stat__label {
+  margin-top: 18px;
+  color: var(--blue-ink);
+  font-family: var(--display);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  letter-spacing: var(--ls-h3);
+  line-height: 1.22;
+}
+
+.lp-stat__text {
+  max-width: 36ch;
+  margin: 12px 0 0;
+  color: var(--ink-body);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.lp-reality__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px 32px;
+  margin-top: clamp(48px, 6vw, 88px);
+  padding: clamp(24px, 3vw, 36px) clamp(24px, 3vw, 40px);
+  border-radius: var(--radius-lg);
+  background: var(--paper-soft);
+}
+
+.lp-reality__question {
+  flex: 1 1 320px;
+  color: var(--blue-ink);
+  font-family: var(--display);
+  font-size: clamp(20px, 2vw, 28px);
+  font-weight: 600;
+  letter-spacing: -.02em;
+  line-height: 1.25;
+}
+
+.lp-reality__foot .lp-source { flex-basis: 100%; }
+
+/* ── 3. Desafios (papel suave) ──────────────────────────────── */
+.lp-challenges { background: var(--paper-soft); }
+
+.lp-challenges__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  counter-reset: none;
+}
+
+.lp-challenge {
+  display: flex;
+  flex-direction: column;
+  min-height: 260px;
+  padding: clamp(24px, 2.6vw, 34px);
+  border: 1px solid var(--ink-faint);
+  border-radius: 24px;
+  background: #fff;
+  transition: transform .25s var(--ease-out), box-shadow .25s ease, border-color .25s ease;
+}
+
+.lp-challenge:hover {
+  transform: translateY(-4px);
+  border-color: rgba(238, 44, 130, .28);
+  box-shadow: 0 18px 40px rgba(10, 33, 64, .08);
+}
+
+.lp-challenge__no {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: auto;
+  border-radius: 50%;
+  background: var(--pink-soft);
+  color: var(--pink-strong);
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.lp-challenge__title {
+  margin-top: 40px;
+  color: var(--blue-ink);
+  font-size: var(--fs-h3);
+  letter-spacing: var(--ls-h3);
+  line-height: 1.22;
+}
+
+.lp-challenge__body {
+  margin-top: 12px;
+  color: var(--ink-body);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+/* ── 4. Manifesto (azul-noite) — efeito 04 em effects.css ───── */
+.lp-manifesto {
+  --focus: var(--pink-light);
+  position: relative;
+  padding: clamp(112px, 14vw, 200px) 0 clamp(24px, 4vw, 56px);
+  overflow: hidden;
+  background: var(--navy);
+  color: #fff;
+}
+
+/* anel do logotipo no canto livre (abaixo da frase, à esquerda do texto):
+   monta ao entrar e gira com a rolagem, sem passar por trás das letras */
+.lp-manifesto .lp-manifesto__anel {
+  --tam: clamp(420px, 46vw, 700px);
+  position: absolute;
+  bottom: calc(var(--tam) * -.3);
+  left: calc(var(--tam) * -.56);
+  width: var(--tam);
+  height: auto;
+  aspect-ratio: 1;
+  opacity: .42;
+  pointer-events: none;
+  /* some antes da borda da seção, em vez de ser cortado em linha reta */
+  -webkit-mask-image: linear-gradient(to bottom, #000 38%, transparent 68%);
+  mask-image: linear-gradient(to bottom, #000 38%, transparent 68%);
+}
+
+.lp-manifesto .shell { position: relative; z-index: 1; }
+
+.lp-manifesto__inner { max-width: 1120px; }
+
+.lp-manifesto__lead {
+  max-width: 15ch;
+  font-size: clamp(40px, 6.4vw, 100px);
+  font-weight: 600;
+  letter-spacing: -.05em;
+  line-height: 1;
+}
+
+.lp-manifesto__text {
+  max-width: 38ch;
+  margin-top: clamp(32px, 4vw, 56px);
+  margin-left: auto;
+  font-family: var(--display);
+  font-size: clamp(22px, 2.3vw, 34px);
+  font-weight: 500;
+  letter-spacing: -.025em;
+  line-height: 1.34;
+}
+
+/* ── 5. Soluções (azul-noite) — efeito 02 em effects.css ────── */
+.lp-solutions {
+  --focus: var(--pink-light);
+  background: var(--navy);
+  color: #fff;
+}
+
+.lp-solcard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(251, 250, 252, .1);
+  border-radius: 24px;
+  background: #0f2b52;
+  color: #fff;
+}
+
+.lp-solcard__type {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(10, 33, 64, .82);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.lp-solcard__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 22px 22px;
+}
+
+.lp-solcard__index {
+  color: var(--pink-light);
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.lp-solcard__name {
+  color: #fff;
+  font-family: var(--display);
+  font-size: clamp(18px, 1.5vw, 21px);
+  font-weight: 600;
+  letter-spacing: -.02em;
+  line-height: 1.22;
+}
+
+.lp-solcard__line {
+  color: var(--paper-sub);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.lp-solcard--custom {
+  --focus: #fff;
+  justify-content: flex-end;
+  gap: 20px;
+  padding: clamp(24px, 2.6vw, 36px);
+  border-color: transparent;
+  background: var(--pink-vivid);
+}
+
+.lp-solcard__custom {
+  font-family: var(--display);
+  font-size: clamp(22px, 2vw, 30px);
+  font-weight: 600;
+  letter-spacing: -.03em;
+  line-height: 1.18;
+}
+
+.lp-solcard--custom .ctapill { align-self: flex-start; }
+
+.lp-roundbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(251, 250, 252, .3);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 18px;
+  transition: background .2s ease, border-color .2s ease;
+}
+
+.lp-roundbtn:hover {
+  background: rgba(251, 250, 252, .1);
+  border-color: #fff;
+}
+
+/* ── 6. Metodologia (papel) — efeito 01 em effects.css ──────── */
+.lp-method { background: var(--paper); }
+
+.lp-step {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  border-radius: 32px;
+  background: #fff;
+  color: var(--blue-ink);
+}
+
+.lp-step__text {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: clamp(28px, 3.6vw, 52px);
+}
+
+.lp-step__label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  opacity: .8;
+}
+
+.lp-step__title {
+  color: inherit;
+  font-size: clamp(30px, 3.4vw, 50px);
+  font-weight: 600;
+  letter-spacing: -.04em;
+  line-height: 1.02;
+}
+
+.lp-step__body {
+  max-width: 34ch;
+  margin-top: 14px;
+  font-size: clamp(16px, 1.3vw, 18px);
+  line-height: 1.6;
+  opacity: .88;
+}
+
+.lp-step__no {
+  margin-top: auto;
+  color: var(--pink);
+  font-family: var(--display);
+  font-size: clamp(72px, 9vw, 136px);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.06em;
+  line-height: .8;
+}
+
+.lp-step__arte {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+}
+
+/* do claro ao rosa: o processo vai ganhando cor a cada etapa */
+.lp-step--1 { border: 1px solid var(--ink-hair); }
+.lp-step--2 { background: var(--pink-soft); }
+.lp-step--2 .lp-step__no { color: var(--pink-strong); }
+.lp-step--3 { --focus: var(--pink-light); background: var(--blue-deep); color: #fff; }
+.lp-step--4 { --focus: #fff; background: var(--pink-vivid); color: #fff; }
+.lp-step--4 .lp-step__no { color: #fff; }
+/* no rosa, texto pequeno sem transparência para manter 4.5:1 */
+.lp-step--4 .lp-step__label,
+.lp-step--4 .lp-step__body { opacity: 1; }
+
+/* ── 7. Antes / depois — efeito 05 em effects.css ───────────── */
+.lp-results { background: var(--charcoal); }
+
+/* ── 8. Contato (azul-noite + diagnóstico) — estilos do teste em diagnostico.css ── */
+.lp-contact {
+  --focus: var(--pink-light);
+  background:
+    radial-gradient(ellipse 50% 60% at 0% 100%, rgba(21, 87, 155, .45), transparent 70%),
+    var(--navy);
+  color: #fff;
+}
+
+.lp-contact__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "intro diag"
+    "lista diag";
+  column-gap: clamp(40px, 6vw, 96px);
+  align-items: start;
+}
+
+.lp-contact__intro { grid-area: intro; }
+.lp-contact__intro .lp-title { max-width: 14ch; }
+.lp-contact__intro .lp-guide { margin-top: 20px; }
+
+.lp-contact__list {
+  grid-area: lista;
+  margin: clamp(32px, 4vw, 48px) 0 0;
+  border-top: 1px solid var(--paper-hair);
+}
+
+.lp-contact__line {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+  min-height: 60px;
+  border-bottom: 1px solid var(--paper-hair);
+}
+
+.lp-contact__line dt {
+  color: var(--paper-sub);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.lp-contact__line dd {
+  margin: 0;
+  color: #fff;
+  font-size: 16px;
+}
+
+.lp-contact__line a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-color: var(--pink);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+.lp-contact__line a:hover { color: var(--pink-light); }
+
+/* quando o painel do diagnóstico aparece, ele ganha a largura toda:
+   título e contatos numa linha, o painel inteiro embaixo */
+.lp-contact.is-resultado .lp-contact__grid {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "intro lista"
+    "diag diag";
+  gap: clamp(32px, 4vw, 48px) 48px;
+  align-items: end;
+}
+
+.lp-contact.is-resultado .lp-contact__intro .lp-guide { display: none; }
+.lp-contact.is-resultado .lp-contact__list { margin-top: 0; }
+.lp-contact.is-resultado .lp-contact__diag { align-self: start; }
+
+.lp-contact__diag {
+  grid-area: diag;
+  min-width: 0;
+  scroll-margin-top: calc(var(--header-h) + 16px);
+}
+
+/* ── 9. Rodapé com o logotipo oficial ───────────────────────── */
+.sitefooter {
+  --focus: var(--pink-light);
+  position: relative;
+  z-index: 1;
+  background: #000;
+  color: rgba(251, 250, 252, .78);
+  font-size: 14px;
+}
+
+.lp-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px var(--gutter);
+  padding-block: clamp(48px, 6vw, 72px) 40px;
+}
+
+.lp-foot__brand {
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(24px, 4vw, 56px);
+}
+
+.lp-logo {
+  width: clamp(96px, 10vw, 132px);
+  height: auto;
+}
+
+.lp-foot__line {
+  color: #fff;
+  font-family: var(--display);
+  font-size: clamp(28px, 4vw, 56px);
+  font-weight: 600;
+  letter-spacing: -.04em;
+  line-height: 1;
+}
+
+.lp-foot__line span { color: var(--pink); }
+
+.lp-foot__side {
+  display: grid;
+  gap: 14px;
+  justify-items: end;
+  text-align: right;
+}
+
+.lp-foot .footcontact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px 22px;
+}
+
+.lp-foot .footcontact a,
+.lp-foot .footcontact span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: rgba(251, 250, 252, .9);
+  text-decoration: none;
+}
+
+.lp-foot .footcontact a:hover { color: var(--pink-light); }
+.lp-foot .footcopy { color: rgba(251, 250, 252, .7); font-size: 13px; }
+
+/* ── Responsivo ─────────────────────────────────────────────── */
+@media (max-width: 1080px) {
+  .lp-challenges__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lp-tally__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* uma coluna: título → teste → contatos diretos */
+  .lp-contact__grid,
+  .lp-contact.is-resultado .lp-contact__grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas:
+      "intro"
+      "diag"
+      "lista";
+    gap: 32px;
+  }
+  .lp-contact__list,
+  .lp-contact.is-resultado .lp-contact__list { margin-top: 8px; }
+  .lp-contact:not(.is-resultado) .lp-contact__diag,
+  .lp-contact:not(.is-resultado) .lp-contact__list { width: 100%; max-width: 680px; }
+  .lp-contact__intro .lp-title { max-width: 18ch; }
+}
+
+@media (max-width: 860px) {
+  .lp-head--split { grid-template-columns: minmax(0, 1fr); align-items: start; }
+
+  .lp-hero { min-height: 0; }
+
+  .lp-hero__grid { grid-template-columns: minmax(0, 1fr); }
+
+  .lp-hero__title { max-width: 13ch; }
+
+  .lp-hero__media { max-width: min(420px, 86vw); }
+
+  .lp-reality__grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+
+  .lp-challenges__grid { grid-template-columns: minmax(0, 1fr); }
+  .lp-challenge { min-height: 0; }
+  .lp-challenge__title { margin-top: 28px; }
+
+  .lp-manifesto__text { margin-left: 0; }
+  /* no celular o texto ocupa a largura toda: o anel sairia por trás das letras */
+  .lp-manifesto .lp-manifesto__anel { display: none; }
+
+  .lp-step { grid-template-columns: minmax(0, 1fr); }
+  .lp-step__arte { order: -1; height: clamp(150px, 24svh, 220px); }
+  .lp-step__text { gap: 14px; }
+  .lp-step__no { display: none; }
+
+  .lp-contact__line { grid-template-columns: 92px minmax(0, 1fr); }
+
+  .lp-foot,
+  .lp-foot__brand { align-items: flex-start; }
+  .lp-foot__brand { flex-direction: column; }
+  .lp-foot__side { justify-items: start; text-align: left; }
+  .lp-foot .footcontact { justify-content: flex-start; }
+}
+
+@media (max-width: 560px) {
+  .lp-hero__actions .ctapill { flex: 1 1 100%; justify-content: center; }
+  .lp-tally__list { gap: 22px 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-hero__copy { animation: none; }
+  .lp-challenge { transition: none; }
+}

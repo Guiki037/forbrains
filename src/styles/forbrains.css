@@ -1,0 +1,137 @@
+/* ══════════════════════════════════════════════════════════════
+   FORBRAINS PEOPLE LAB — peças compartilhadas da marca
+   Rosa + azul sempre juntos; cantos suaves; CTA pill com text-roll.
+   O layout das seções da landing fica em landing.css e os quatro
+   efeitos de rolagem em effects.css.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── CTA pill com text-roll ─────────────────────────────────── */
+.ctapill {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 14px 28px;
+  border-radius: var(--radius-pill);
+  background: var(--pink-strong);
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: .01em;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 10px 28px rgba(200, 0, 104, .28);
+  transition: background .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.ctapill:hover {
+  background: var(--blue);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(21, 87, 155, .34);
+}
+
+.ctapill:active { transform: translateY(0); }
+
+.ctapill .roll { overflow: hidden; height: 1.35em; }
+.ctapill .rolltrack {
+  display: flex;
+  flex-direction: column;
+  transition: transform .4s cubic-bezier(.16, .03, .08, 1);
+}
+.ctapill .rollline { display: block; line-height: 1.35; white-space: nowrap; }
+
+@media (pointer: fine) {
+  .ctapill:hover .rolltrack { transform: translateY(-1.35em); }
+}
+
+.ctapill .ctaarrow { font-family: var(--sans); transition: transform var(--fast); }
+.ctapill:hover .ctaarrow { transform: translateX(4px); }
+
+/* variante clara: sobre rosa ou azul-noite */
+.ctapill-light {
+  background: #fff;
+  color: var(--pink-strong);
+  box-shadow: 0 10px 28px rgba(10, 33, 64, .22);
+}
+
+.ctapill-light:hover { background: var(--blue-ink); color: #fff; }
+
+/* ── Header: marca + CTA ────────────────────────────────────── */
+.headname {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--display);
+  font-weight: 700;
+}
+
+.headname .headdot { background: var(--pink); }
+.sitehead .headrole { color: var(--blue); }
+
+.headcta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 20px;
+  border-radius: var(--radius-pill);
+  background: var(--pink-strong);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background .2s ease, transform .2s ease;
+}
+
+.headcta:hover { background: var(--blue); transform: translateY(-1px); }
+
+/* ── Marquee (componente disponível em parts/Marquee.jsx) ───── */
+.marqueeband {
+  overflow: hidden;
+  padding-block: clamp(18px, 2.6vw, 30px);
+  user-select: none;
+}
+
+.marquee-pink { background: var(--pink); }
+.marquee-blue { background: var(--blue-deep); }
+
+.marqueetrack {
+  display: flex;
+  align-items: center;
+  gap: clamp(28px, 4vw, 56px);
+  width: max-content;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.marqueechunk { display: inline-flex; align-items: center; gap: clamp(28px, 4vw, 56px); }
+
+.marqueeword {
+  font-family: var(--display);
+  font-size: clamp(30px, 4.6vw, 64px);
+  font-weight: 700;
+  letter-spacing: -.03em;
+  line-height: 1;
+  color: #fff;
+}
+
+.marquee-blue .marqueeword { color: rgba(251, 250, 252, .92); }
+
+.marqueedot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--blue-deep);
+}
+
+.marquee-blue .marqueedot { background: var(--pink); }
+
+@media (prefers-reduced-motion: reduce) {
+  .marqueetrack { transform: none !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ctapill,
+  .headcta { transition: none; }
+}

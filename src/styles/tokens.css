@@ -1,0 +1,88 @@
+:root {
+  /* Superfícies — papel levemente azulado, tinta grafite-azulada */
+  --paper: #fbfafc;
+  --paper-soft: #f2f1f7;
+  --ink: #171423;
+
+  /* Hierarquia da tinta via alpha */
+  --ink-body: rgba(23, 20, 35, .84);
+  --ink-sub: rgba(23, 20, 35, .64);
+  --ink-weak: rgba(23, 20, 35, .4);
+  --ink-hair: rgba(23, 20, 35, .12);
+  --ink-faint: rgba(23, 20, 35, .06);
+
+  /* Tinta sobre fundos escuros */
+  --paper-body: rgba(251, 250, 252, .88);
+  --paper-sub: rgba(251, 250, 252, .72);
+  --paper-hair: rgba(251, 250, 252, .16);
+
+  /* Marca Forbrains — rosa e azul sempre juntos.
+     Pela skill: azul-noite como base de confiança, rosa só como destaque
+     (CTA, números, palavras-chave). Sem degradê rosa→roxo. */
+  --pink: #ee2c82;          /* marca: números grandes e detalhes (texto grande, 3.8:1 no papel) */
+  --pink-strong: #c80068;   /* CTA com texto branco (5.7:1) e rosa pequeno sobre claro (5.5:1) */
+  --pink-light: #ff5ca8;    /* rosa pequeno sobre azul-noite (5.6:1) */
+  --pink-vivid: #d1006f;    /* cena "depois" com texto branco (5.3:1) */
+  --pink-soft: #fce7f1;
+  --blue: #15579b;
+  --blue-light: #4f8fd6;
+  --blue-deep: #0d2c52;
+  --blue-ink: #0a2140;
+  --navy: var(--blue-ink);
+  --charcoal: #17181d;      /* cena "antes": neutra, sem cor de marca */
+  --accent: var(--pink);
+
+  /* Tipografia — Sora para display, Inter para texto */
+  --sans: Inter, "Segoe UI", system-ui, sans-serif;
+  --display: "Sora", Inter, "Segoe UI", system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --fs-display: clamp(42px, 5.6vw, 84px);
+  --fs-name: clamp(44px, 8.6vw, 128px);
+  --fs-h2: clamp(32px, 4.2vw, 58px);
+  --fs-h3: clamp(20px, 1.9vw, 26px);
+  --fs-lead: clamp(17px, 1.4vw, 20px);
+  --fs-body: 16px;
+  --fs-table: 14px;
+  --fs-cap: 14px;
+  --fs-label: 12px;
+
+  --ls-display: -.045em;
+  --ls-name: -.04em;
+  --ls-h2: -.035em;
+  --ls-h3: -.015em;
+  --ls-label: .14em;
+
+  /* Layout */
+  --container-pad: 40px;
+  --section-pad: clamp(88px, 10vw, 152px);
+  --header-h: 64px;
+  --header-h-compact: 56px;
+  --maxw: 1280px;
+  --read: 680px;
+  --gutter: 24px;
+  --col: calc((min(100vw, var(--maxw)) - 2 * var(--container-pad) - 11 * var(--gutter)) / 12);
+
+  /* Cantos suaves do rebranding */
+  --radius: 18px;
+  --radius-sm: 12px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+
+  --fast: .3s ease-in-out;
+  --slow: 1s cubic-bezier(.76, 0, .24, 1);
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+
+  --file-open: .42s;
+  --file-close: .28s;
+  --flip: .32s;
+}
+
+@media (max-width: 860px) {
+  :root {
+    --container-pad: 20px;
+    --section-pad: 80px;
+    --header-h: 56px;
+    --header-h-compact: 50px;
+  }
+}
