@@ -45,7 +45,7 @@ export default function SolutionsBoard({ chapter, portfolio }) {
           <ul className="fx-hgallery__fita" data-fita>
             {projects.map((project, index) => (
               <li className="fx-hgallery__item" data-card key={project.id}>
-                <article className="lp-solcard" aria-labelledby={`sol-${project.id}`}>
+                <article className="lp-solcard lp-solcard--vivo" aria-labelledby={`sol-${project.id}`}>
                   <div className="lp-solcard__arte">
                     <Arte emblema={emblemaSolucao(project.id)} largura={320} altura={240} />
                     <span className="lp-solcard__type">{t(typeLabels[project.type])}</span>

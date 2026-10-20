@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="is-booting">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -17,8 +17,143 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='8' fill='%23ee2c82'/%3E%3C/svg%3E" />
+    <style>
+      html.is-booting, html.is-booting body { overflow: hidden; }
+      html, body { background: #000; }
+      #boot {
+        position: fixed;
+        inset: 0;
+        z-index: 80;
+        display: grid;
+        place-items: center;
+        align-content: center;
+        gap: 28px;
+        background: #000;
+        color: #fff;
+        transition: opacity .45s ease, visibility .45s ease;
+      }
+      #boot.is-done { opacity: 0; visibility: hidden; pointer-events: none; }
+      #boot .bootlogo { display: grid; justify-items: center; gap: 14px; }
+      #boot svg { width: min(156px, 42vw); height: auto; overflow: visible; }
+      #boot .dot {
+        opacity: 0;
+        transform: scale(.15);
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: bootdot .7s cubic-bezier(.16, 1, .3, 1) forwards;
+        animation-delay: calc(var(--i) * 64ms);
+      }
+      #boot .bootname, #boot .boottag {
+        margin: 0;
+        font-family: Sora, Inter, "Segoe UI", system-ui, sans-serif;
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      #boot .bootname {
+        width: min(176px, 48vw);
+        aspect-ratio: 522 / 208;
+        overflow: hidden;
+        clip-path: inset(0 100% 0 0);
+        animation: bootwrite .75s cubic-bezier(.16, 1, .3, 1) 2.25s forwards;
+      }
+      #boot .bootname img {
+        display: block;
+        width: 100%;
+        height: auto;
+        margin-top: calc(100% * -565 / 522);
+      }
+      #boot .boottag {
+        font-size: clamp(22px, 3vw, 32px);
+        font-weight: 600;
+        letter-spacing: -.03em;
+        animation: bootname .55s cubic-bezier(.16, 1, .3, 1) 2.8s forwards;
+      }
+      #boot .boottag span { color: #ee2c82; }
+      #boot .bootbar {
+        width: min(180px, 46vw);
+        height: 2px;
+        overflow: hidden;
+        border-radius: 2px;
+        background: rgba(255, 255, 255, .16);
+      }
+      #boot .bootbar span {
+        display: block;
+        height: 100%;
+        background: #ee2c82;
+        transform: scaleX(0);
+        transform-origin: left;
+        animation: bootbar 2.85s cubic-bezier(.45, 0, .2, 1) forwards;
+      }
+      @keyframes bootdot {
+        to { opacity: 1; transform: scale(1); }
+      }
+      @keyframes bootname {
+        to { opacity: 1; transform: none; }
+      }
+      @keyframes bootwrite {
+        to { opacity: 1; transform: none; clip-path: inset(0 0 0 0); }
+      }
+      @keyframes bootbar {
+        to { transform: scaleX(1); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #boot { transition: none; }
+        #boot .dot, #boot .bootname, #boot .boottag, #boot .bootbar span {
+          animation: none;
+          opacity: 1;
+          transform: none;
+        }
+        #boot .bootname { clip-path: none; }
+        #boot .bootbar span { transform: scaleX(1); }
+      }
+    </style>
   </head>
   <body>
+    <div id="boot" role="status" aria-live="polite" aria-label="Carregando Forbrains People Lab">
+      <div class="bootlogo" aria-hidden="true">
+        <svg viewBox="0 0 200 200" width="200" height="200">
+        <circle class="dot" style="--i:0" cx="32.4" cy="84.2" r="11.61" fill="#31c5fa"/>
+        <circle class="dot" style="--i:1" cx="53.7" cy="83.3" r="2.71" fill="#4eaff5"/>
+        <circle class="dot" style="--i:2" cx="57.5" cy="70.6" r="4.05" fill="#54abf5"/>
+        <circle class="dot" style="--i:3" cx="38.7" cy="56.5" r="9.72" fill="#3abef9"/>
+        <circle class="dot" style="--i:4" cx="53.6" cy="36.7" r="6.48" fill="#4eaff5"/>
+        <circle class="dot" style="--i:5" cx="68.3" cy="53.9" r="6.60" fill="#63a0f2"/>
+        <circle class="dot" style="--i:6" cx="69.9" cy="25.1" r="4.08" fill="#659ef2"/>
+        <circle class="dot" style="--i:7" cx="82.5" cy="21.2" r="2.72" fill="#768fef"/>
+        <circle class="dot" style="--i:8" cx="87.9" cy="39.0" r="9.45" fill="#7e88ed"/>
+        <circle class="dot" style="--i:9" cx="116.3" cy="32.9" r="11.60" fill="#a664e5"/>
+        <circle class="dot" style="--i:10" cx="117.1" cy="53.1" r="2.73" fill="#a763e5"/>
+        <circle class="dot" style="--i:11" cx="129.8" cy="56.9" r="4.06" fill="#b853e1"/>
+        <circle class="dot" style="--i:12" cx="144.1" cy="39.2" r="9.73" fill="#c843de"/>
+        <circle class="dot" style="--i:13" cx="163.8" cy="54.1" r="6.49" fill="#de2cd9"/>
+        <circle class="dot" style="--i:14" cx="146.6" cy="67.8" r="6.59" fill="#cb40dd"/>
+        <circle class="dot" style="--i:15" cx="175.5" cy="70.4" r="4.06" fill="#ec1ed7"/>
+        <circle class="dot" style="--i:16" cx="179.3" cy="83.0" r="2.71" fill="#f01ad6"/>
+        <circle class="dot" style="--i:17" cx="161.4" cy="87.4" r="9.45" fill="#dc2fda"/>
+        <circle class="dot" style="--i:18" cx="167.5" cy="115.8" r="11.61" fill="#e328d8"/>
+        <circle class="dot" style="--i:19" cx="146.3" cy="116.3" r="2.72" fill="#cb40dd"/>
+        <circle class="dot" style="--i:20" cx="142.6" cy="129.1" r="4.06" fill="#c644de"/>
+        <circle class="dot" style="--i:21" cx="161.2" cy="143.5" r="9.73" fill="#dc2fda"/>
+        <circle class="dot" style="--i:22" cx="146.4" cy="163.4" r="6.49" fill="#cb40dd"/>
+        <circle class="dot" style="--i:23" cx="131.7" cy="145.8" r="6.58" fill="#ba51e1"/>
+        <circle class="dot" style="--i:24" cx="130.0" cy="174.9" r="4.09" fill="#b853e1"/>
+        <circle class="dot" style="--i:25" cx="117.5" cy="178.8" r="2.72" fill="#a862e4"/>
+        <circle class="dot" style="--i:26" cx="112.1" cy="160.7" r="9.45" fill="#a069e6"/>
+        <circle class="dot" style="--i:27" cx="83.7" cy="166.8" r="11.61" fill="#788dee"/>
+        <circle class="dot" style="--i:28" cx="82.9" cy="146.8" r="2.71" fill="#778eee"/>
+        <circle class="dot" style="--i:29" cx="70.1" cy="143.1" r="4.07" fill="#659ef2"/>
+        <circle class="dot" style="--i:30" cx="56.0" cy="160.5" r="9.72" fill="#51adf5"/>
+        <circle class="dot" style="--i:31" cx="36.1" cy="145.7" r="6.49" fill="#36c1f9"/>
+        <circle class="dot" style="--i:32" cx="53.4" cy="132.2" r="6.59" fill="#4eaff5"/>
+        <circle class="dot" style="--i:33" cx="24.6" cy="129.3" r="4.09" fill="#26cdfc"/>
+        <circle class="dot" style="--i:34" cx="20.7" cy="116.7" r="2.73" fill="#21d1fc"/>
+        <circle class="dot" style="--i:35" cx="38.5" cy="112.6" r="9.45" fill="#39bff9"/>
+        </svg>
+        <p class="bootname"><img src="assets/images/logo-forbrains.png" alt="" width="522" height="773" /></p>
+      </div>
+      <p class="boottag">Pessoas no <span>centro.</span></p>
+      <span class="bootbar" aria-hidden="true"><span></span></span>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

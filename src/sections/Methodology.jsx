@@ -29,7 +29,7 @@ export default function Methodology({ chapter }) {
         <ol className="fx-stack" ref={listRef}>
           {methodSteps.map((step, index) => (
             <li
-              className={`fx-stack__folha lp-step lp-step--${index + 1}`}
+              className={`fx-stack__folha lp-step lp-step--${index + 1} lp-step--vivo`}
               data-folha
               style={{ '--i': index }}
               key={step.no}

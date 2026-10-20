@@ -60,7 +60,6 @@ export default function SiteHead({ compact, active }) {
           <span className="headname">
             Forbrains<span className="headdot" aria-hidden="true" />
           </span>
-          <span className="headrole overline">People Lab</span>
         </a>
 
         <nav className="siteheadnav" id="sitenav" aria-label={t(ui.head.nav)}>

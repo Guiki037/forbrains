@@ -58,6 +58,7 @@ const Desenho = forwardRef(function Desenho({ emblema, largura, altura, tema = '
         <circle
           key={k}
           data-p
+          data-i={Math.floor(Number(p.i ?? 0))}
           cx={p.x.toFixed(1)}
           cy={p.y.toFixed(1)}
           r={p.r.toFixed(2)}
@@ -66,6 +67,8 @@ const Desenho = forwardRef(function Desenho({ emblema, largura, altura, tema = '
           style={{
             '--i': p.i ?? 0,
             '--j': p.j ?? 0,
+            '--ox': Number(p.x).toFixed(1),
+            '--oy': Number(p.y).toFixed(1),
             ...(p.dx ? { '--dx': `${p.dx.toFixed(1)}px`, '--dy': `${p.dy.toFixed(1)}px` } : null)
           }}
         />

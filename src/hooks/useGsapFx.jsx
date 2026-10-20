@@ -1,6 +1,29 @@
 import { useEffect, useRef } from 'react'
 import { gsap, ScrollTrigger, reducedMotion } from '../lib/gsap.js'
 
+const formatarConta = (value, decimals) =>
+  value.toLocaleString('pt-BR', {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals
+  })
+
+/** A tela de abertura cobre o hero; o contador só começa quando ela sai. */
+function aoSairDoBoot(iniciar) {
+  const boot = document.getElementById('boot')
+  if (!boot || boot.classList.contains('is-done')) {
+    iniciar()
+    return () => {}
+  }
+  const obs = new MutationObserver(() => {
+    if (!boot.isConnected || boot.classList.contains('is-done')) {
+      obs.disconnect()
+      iniciar()
+    }
+  })
+  obs.observe(boot, { attributes: true, attributeFilter: ['class'] })
+  return () => obs.disconnect()
+}
+
 /**
  * Contador animado: o texto do elemento sobe de 0 até `target` quando o
  * elemento entra na viewport. Em prefers-reduced-motion, mostra o valor final.
@@ -10,31 +33,34 @@ export function useCountUp(target, { duration = 1.6, decimals = 0 } = {}) {
 
   useEffect(() => {
     const node = ref.current
-    if (!node) return
-    const finalText = Math.abs(target).toLocaleString('pt-BR', {
-      minimumFractionDigits: decimals,
-      maximumFractionDigits: decimals
-    })
+    if (!node) return undefined
+    const finalText = formatarConta(Math.abs(target), decimals)
     if (reducedMotion()) {
       node.textContent = finalText
-      return
+      return undefined
     }
-    const state = { value: 0 }
-    const tween = gsap.to(state, {
-      value: Math.abs(target),
-      duration,
-      ease: 'power3.out',
-      scrollTrigger: { trigger: node, start: 'top 88%', once: true },
-      onUpdate: () => {
-        node.textContent = state.value.toLocaleString('pt-BR', {
-          minimumFractionDigits: decimals,
-          maximumFractionDigits: decimals
-        })
-      }
-    })
+
+    let tween
+    const iniciar = () => {
+      const visivel = node.getBoundingClientRect().top < window.innerHeight * 0.88
+      if (visivel) node.textContent = formatarConta(0, decimals)
+      const state = { value: 0 }
+      tween = gsap.to(state, {
+        value: Math.abs(target),
+        duration,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: node, start: 'top 88%', once: true },
+        onUpdate: () => {
+          node.textContent = formatarConta(state.value, decimals)
+        }
+      })
+    }
+
+    const pararBoot = aoSairDoBoot(iniciar)
     return () => {
-      tween.scrollTrigger?.kill()
-      tween.kill()
+      pararBoot()
+      tween?.scrollTrigger?.kill()
+      tween?.kill()
     }
   }, [target, duration, decimals])
 

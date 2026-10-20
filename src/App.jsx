@@ -23,6 +23,36 @@ export default function App() {
   useScrollTriggerRefresh([])
 
   useEffect(() => {
+    const boot = document.getElementById('boot')
+    if (!boot) return undefined
+    const html = document.documentElement
+    html.classList.add('is-booting')
+    let saida = 0
+    let espera = 0
+    const fechar = () => {
+      if (!boot.isConnected || boot.classList.contains('is-done')) return
+      boot.classList.add('is-done')
+      html.classList.remove('is-booting')
+      const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      saida = window.setTimeout(() => boot.remove(), reduzir ? 0 : 640)
+    }
+    const inicio = performance.now()
+    const pronto = () => {
+      window.clearTimeout(espera)
+      espera = window.setTimeout(fechar, Math.max(0, 3400 - (performance.now() - inicio)))
+    }
+    if (document.readyState === 'complete') pronto()
+    else window.addEventListener('load', pronto, { once: true })
+    const teto = window.setTimeout(fechar, 5000)
+    return () => {
+      window.clearTimeout(espera)
+      window.clearTimeout(teto)
+      window.clearTimeout(saida)
+      window.removeEventListener('load', pronto)
+    }
+  }, [])
+
+  useEffect(() => {
     const node = document.getElementById('top')
     if (!node) return undefined
     const io = new IntersectionObserver(

@@ -1,4 +1,4 @@
-import { arco, bezier, contorno, espalhar, grade, reta, retanguloArredondado, sorteio } from '../../lib/dots.js'
+import { arco, contorno, espalhar, grade, reta, retanguloArredondado } from '../../lib/dots.js'
 
 /**
  * Emblemas de pontos que substituem as fotos.
@@ -6,20 +6,41 @@ import { arco, bezier, contorno, espalhar, grade, reta, retanguloArredondado, so
  * Cada emblema devolve { pontos, linhas }; linhas são opcionais.
  */
 
-const comGrupo = (lista, extra) => lista.map((p) => ({ ...p, ...extra }))
+/** Pessoa mínima: cabeça em destaque e tronco. y é o centro da cabeça. */
+function figura(x, y, extra = {}) {
+  return [
+    { x, y, r: 8, o: 1, tipo: 'acento', j: 0, ...extra },
+    { x, y: y + 16, r: 3.1, o: 0.7, tipo: 'base', j: 1, ...extra },
+    { x: x - 11, y: y + 20, r: 2.5, o: 0.55, tipo: 'base', j: 2, ...extra },
+    { x: x + 11, y: y + 20, r: 2.5, o: 0.55, tipo: 'base', j: 3, ...extra },
+    { x, y: y + 30, r: 2.6, o: 0.55, tipo: 'base', j: 4, ...extra }
+  ]
+}
 
 /* ────────────────────────── soluções (320 × 240) ────────────────────────── */
 
 const SOLUCOES = {
-  /* facilitador ao centro, ondas de fala e a turma em arco */
-  'workshop-comunicacao': () => ({
-    pontos: [
-      ...comGrupo([{ x: 160, y: 84, r: 11, j: 0 }], { tipo: 'acento', o: 1, i: 0 }),
-      ...arco(160, 84, 27, 7, 2.4, 205, 335, { o: 0.75, i: 1 }),
-      ...arco(160, 84, 42, 9, 2.4, 210, 330, { o: 0.45, i: 2 }),
-      ...arco(160, 84, 92, 9, 6.5, 22, 158, { tipo: 'acento', i: 3 })
+  /* sala de workshop: quem facilita fala para a turma sentada em U */
+  'workshop-comunicacao': () => {
+    const fala = [
+      ...arco(160, 42, 18, 5, 2.4, 206, 334, { o: 0.9, tipo: 'acento', i: 0 }),
+      ...arco(160, 42, 30, 7, 2.1, 210, 330, { o: 0.4, i: 0 })
     ]
-  }),
+    const mesa = [
+      ...reta(92, 112, 92, 184, 7, 2.6, { o: 0.5, i: 1 }),
+      ...reta(92, 184, 228, 184, 10, 2.6, { o: 0.5, i: 1 }),
+      ...reta(228, 184, 228, 112, 7, 2.6, { o: 0.5, i: 1 })
+    ]
+    const turma = [
+      [64, 124], [64, 156], [64, 188],
+      [256, 124], [256, 156], [256, 188],
+      [124, 214], [160, 218], [196, 214]
+    ].flatMap(([x, y], j) => [
+      { x, y, r: 5.4, o: 1, tipo: 'acento', i: 2, j },
+      { x, y: y + 11, r: 2.3, o: 0.4, tipo: 'base', i: 2, j }
+    ])
+    return { pontos: [...fala, ...figura(160, 64, { i: 0 }), ...mesa, ...turma] }
+  },
 
   /* jornada: degraus que sobem, o topo de cada um aceso */
   'programa-liderancas': () => {
@@ -108,27 +129,33 @@ const SOLUCOES = {
     }
   },
 
-  /* palestra: refletor, palestrante no palco e plateia */
+  /* palestra: tela, quem fala no palco e a plateia em duas fileiras */
   'palestras-focadas': () => {
-    const rand = sorteio(11)
-    const cone = []
-    for (let linha = 0; linha < 9; linha += 1) {
-      const y = 44 + linha * 12
-      const meia = 8 + linha * 7.4
-      const n = 2 + linha
-      for (let k = 0; k < n; k += 1) {
-        const x = 160 - meia + (2 * meia * (k + 0.5 + (rand() - 0.5) * 0.4)) / n
-        cone.push({ x, y, r: 1.7 + linha * 0.06, o: 0.14 + linha * 0.035, tipo: 'base', i: 1, j: linha })
-      }
-    }
+    const tela = [
+      ...retanguloArredondado(104, 18, 112, 58, 8, 11, 2.2, { o: 0.55, i: 0 }),
+      ...reta(122, 38, 198, 38, 5, 1.8, { o: 0.35, i: 0 }),
+      ...reta(122, 50, 176, 50, 4, 1.8, { o: 0.35, i: 0 })
+    ]
+    const luz = [{ x: 160, y: 8, r: 4.5, o: 1, tipo: 'acento', i: 1, j: 0 }]
+    ;[124, 142, 160, 178, 196].forEach((x, j) => {
+      reta(160, 12, x, 96, 4, 1.7, { o: 0.32, i: 1, j }).slice(1).forEach((p) => luz.push(p))
+    })
+    const plateia = []
+    ;[
+      [186, [58, 104, 150, 196, 242], 5.2],
+      [212, [40, 82, 124, 166, 208, 250, 292], 4]
+    ].forEach(([y, xs, r], fileira) => {
+      xs.forEach((x, j) => {
+        plateia.push({ x, y, r, o: 1, tipo: 'acento', i: 3, j: fileira * 8 + j })
+      })
+    })
     return {
       pontos: [
-        { x: 160, y: 30, r: 5.5, o: 1, tipo: 'acento', i: 0, j: 0 },
-        ...cone,
-        { x: 160, y: 150, r: 10, o: 1, tipo: 'acento', i: 2, j: 0 },
-        ...reta(72, 170, 248, 170, 15, 1.8, { o: 0.5, i: 2 }),
-        ...reta(84, 198, 236, 198, 9, 5, { tipo: 'acento', i: 3 }),
-        ...reta(94, 218, 226, 218, 8, 3.6, { o: 0.38, i: 3 })
+        ...tela,
+        ...luz,
+        ...figura(160, 100, { i: 2 }),
+        ...reta(52, 156, 268, 156, 14, 2.5, { o: 0.6, i: 2 }),
+        ...plateia
       ]
     }
   },
@@ -216,61 +243,38 @@ const ETAPAS = {
     }
   },
 
-  /* customização: pontos soltos se organizam numa forma sob medida */
+  /* customização: a ficha de uma pessoa, com três ajustes no tamanho certo */
   '02': () => {
-    const soltos = espalhar(5, 20, [44, 86, 196, 318], 2.2, 4.2, { o: 0.34, i: 0 })
-    const flecha = [
-      ...reta(212, 202, 262, 202, 5, 2.4, { o: 0.6, i: 1 }),
-      { x: 254, y: 192, r: 2.4, o: 0.6, tipo: 'base', i: 1, j: 5 },
-      { x: 254, y: 212, r: 2.4, o: 0.6, tipo: 'base', i: 1, j: 6 }
-    ]
-    const centro = [356, 202]
-    const passo = 27
-    const colmeia = [{ x: centro[0], y: centro[1], r: 8, o: 1, tipo: 'acento', i: 2, j: 0 }]
-    ;[1, 2].forEach((anel) => {
-      for (let lado = 0; lado < 6; lado += 1) {
-        for (let k = 0; k < anel; k += 1) {
-          const a1 = (lado * 60 - 30) * (Math.PI / 180)
-          const a2 = ((lado + 1) * 60 - 30) * (Math.PI / 180)
-          const x1 = centro[0] + Math.cos(a1) * passo * anel
-          const y1 = centro[1] + Math.sin(a1) * passo * anel
-          const x2 = centro[0] + Math.cos(a2) * passo * anel
-          const y2 = centro[1] + Math.sin(a2) * passo * anel
-          const t = k / anel
-          colmeia.push({
-            x: x1 + (x2 - x1) * t,
-            y: y1 + (y2 - y1) * t,
-            r: anel === 1 ? 7 : 6,
-            o: 1,
-            tipo: 'acento',
-            i: 2 + anel * 0.6,
-            j: lado * anel + k
-          })
-        }
-      }
+    const ficha = retanguloArredondado(64, 40, 352, 320, 28, 18, 2.8, { o: 0.38, i: 0 })
+    const barras = [156, 236, 316].flatMap((y, k) => {
+      const comprimento = 100 + k * 55
+      return [
+        ...reta(210, y, 210 + comprimento, y, 6 + k, 3.1, { o: 0.4, i: 1, j: k }),
+        { x: 210 + comprimento, y, r: 9, o: 1, tipo: 'acento', i: 2, j: k }
+      ]
     })
-    return { pontos: [...soltos, ...flecha, ...colmeia] }
+    return { pontos: [...ficha, ...figura(132, 108, { i: 1 }), ...barras] }
   },
 
-  /* execução: o caminho avança e chega ao alvo */
+  /* execução: duas entregas concluídas e a terceira a caminho */
   '03': () => {
-    const caminho = []
-    const total = 24
-    for (let k = 0; k < total; k += 1) {
-      const t = k / (total - 1)
-      const [x, y] = bezier([64, 326], [170, 120], [262, 372], [366, 122], t)
-      const forte = k >= total - 9
-      caminho.push({ x, y, r: 2.2 + t * 4, o: forte ? 1 : 0.35 + t * 0.4, tipo: forte ? 'acento' : 'base', i: 0, j: k })
-    }
-    const alvo = [398, 96]
-    return {
-      pontos: [
-        ...caminho,
-        ...arco(alvo[0], alvo[1], 48, 18, 2.2, 0, 360, { o: 0.32, i: 1 }),
-        ...arco(alvo[0], alvo[1], 28, 12, 3.4, 0, 360, { tipo: 'acento', i: 2 }),
-        { x: alvo[0], y: alvo[1], r: 8, o: 1, tipo: 'acento', i: 3, j: 0 }
-      ]
-    }
+    const itens = [108, 200, 292].flatMap((y, k) => {
+      const caixa = retanguloArredondado(72, y - 26, 52, 52, 10, 9, 2.5, { o: 0.55, i: 0, j: k })
+      const linha = reta(156, y, k === 2 ? 300 : 360, y, k === 2 ? 6 : 9, 2.7, { o: 0.34, i: 1, j: k })
+      const feito = k < 2
+        ? [
+            ...reta(86, y + 2, 96, y + 14, 3, 3.3, { tipo: 'acento', i: 2, j: k }),
+            ...reta(96, y + 14, 114, y - 12, 4, 3.4, { tipo: 'acento', i: 2, j: k })
+          ]
+        : reta(168, y, 108, y, 4, 3.6, { tipo: 'acento', i: 2, j: 4 })
+      return [...caixa, ...linha, ...feito]
+    })
+    const avanco = [
+      ...reta(300, 352, 400, 352, 7, 3.2, { tipo: 'acento', i: 3 }),
+      { x: 392, y: 340, r: 3.2, o: 1, tipo: 'acento', i: 3, j: 8 },
+      { x: 392, y: 364, r: 3.2, o: 1, tipo: 'acento', i: 3, j: 9 }
+    ]
+    return { pontos: [...itens, ...avanco] }
   },
 
   /* acompanhamento: indicador subindo, último ponto em destaque */

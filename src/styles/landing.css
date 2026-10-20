@@ -235,24 +235,72 @@ summary {
   color: #fff;
 }
 
+.lp-hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 22%;
+  opacity: .22;
+  pointer-events: none;
+}
+
+.lp-hero__grid,
+.lp-hero > .shell { position: relative; z-index: 1; }
+
 .lp-hero__grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
-  gap: clamp(32px, 5vw, 80px);
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
 }
 
-.lp-hero__copy { animation: lp-rise .9s var(--ease-out) both; }
-
+.lp-hero__copy {
+  max-width: 760px;
+  animation: lp-rise .9s var(--ease-out) both;
+}
 
 .lp-hero__title {
-  max-width: 12ch;
+  max-width: none;
   color: #fff;
   font-size: var(--fs-display);
   font-weight: 600;
   letter-spacing: var(--ls-display);
   line-height: .98;
-  text-wrap: balance;
+}
+
+.lp-hero__leadin { display: block; max-width: 11ch; }
+
+.lp-hero__line {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  gap: .28em;
+  white-space: nowrap;
+}
+
+.lp-hero__slot {
+  display: inline-grid;
+  vertical-align: baseline;
+  color: var(--pink-light);
+}
+
+.lp-hero__word {
+  grid-area: 1 / 1;
+  color: var(--pink-light);
+  white-space: nowrap;
+  visibility: hidden;
+}
+
+.lp-hero__word.is-on {
+  visibility: visible;
+  animation: lp-word-in .55s var(--ease-out) both;
+}
+
+@keyframes lp-word-in {
+  from { opacity: 0; transform: translateY(.4em); }
+  to { opacity: 1; transform: none; }
 }
 
 .lp-hero__lead {
@@ -269,14 +317,6 @@ summary {
   align-items: center;
   gap: 16px 28px;
   margin-top: clamp(28px, 3.2vw, 40px);
-}
-
-/* o anel do logotipo (HeroArte) ocupa a coluna da direita */
-.lp-hero__media {
-  justify-self: center;
-  width: 100%;
-  max-width: min(600px, calc(100svh - var(--header-h) - 220px));
-  aspect-ratio: 1;
 }
 
 /* números de prova na base do hero */
@@ -589,6 +629,42 @@ summary {
 
 .lp-solcard--custom .ctapill { align-self: flex-start; }
 
+/* Todos os cartões de solução: o desenho abre ao passar o mouse */
+.lp-solcard--vivo {
+  --origem-x: 160;
+  --origem-y: 120;
+  --forca: .2;
+  transition: border-color .25s ease, background .25s ease, box-shadow .25s ease;
+}
+
+.lp-solcard--vivo .arte.is-visivel [data-p],
+.lp-solcard--vivo .arte:not(.is-preparado) [data-p] {
+  transition: transform .55s var(--ease-out);
+  transition-delay: calc(var(--j, 0) * 14ms);
+}
+
+.lp-solcard--vivo:hover {
+  border-color: rgba(255, 92, 168, .85);
+  background: #14356a;
+  box-shadow: inset 0 0 0 1px rgba(255, 92, 168, .35);
+}
+
+.lp-solcard--vivo:hover .lp-solcard__name { color: var(--pink-light); }
+
+.lp-solcard--vivo:hover .lp-solcard__arte {
+  background:
+    radial-gradient(ellipse 70% 70% at 50% 48%, rgba(255, 92, 168, .28), transparent 68%),
+    linear-gradient(160deg, #163f78 0%, #0d2c52 100%);
+}
+
+.lp-solcard--vivo:hover .arte.is-visivel [data-p],
+.lp-solcard--vivo:hover .arte:not(.is-preparado) [data-p] {
+  transform: translate(
+    calc((var(--ox) - var(--origem-x)) * var(--forca) * 1px),
+    calc((var(--oy) - var(--origem-y)) * var(--forca) * 1px)
+  ) scale(1.14);
+}
+
 .lp-roundbtn {
   display: inline-flex;
   align-items: center;
@@ -676,6 +752,52 @@ summary {
 /* no rosa, texto pequeno sem transparência para manter 4.5:1 */
 .lp-step--4 .lp-step__label,
 .lp-step--4 .lp-step__body { opacity: 1; }
+
+/* As quatro etapas: o desenho abre e o número sobe */
+.lp-step--vivo {
+  --origem-x: 240;
+  --origem-y: 200;
+  --forca: .1;
+}
+
+.lp-step--vivo .lp-step__title,
+.lp-step--vivo .lp-step__no {
+  transition: transform .4s var(--ease-out), color .25s ease;
+}
+
+.lp-step--vivo .arte.is-visivel [data-p],
+.lp-step--vivo .arte:not(.is-preparado) [data-p] {
+  transition: transform .55s var(--ease-out);
+  transition-delay: calc(var(--j, 0) * 12ms);
+}
+
+.lp-step--vivo:hover .lp-step__no { transform: translateY(-8px); }
+
+.lp-step--1.lp-step--vivo:hover,
+.lp-step--2.lp-step--vivo:hover { box-shadow: 0 16px 40px rgba(10, 33, 64, .1); }
+
+.lp-step--1.lp-step--vivo:hover .lp-step__title,
+.lp-step--2.lp-step--vivo:hover .lp-step__title { color: var(--pink-strong); }
+
+.lp-step--3.lp-step--vivo:hover { box-shadow: 0 16px 40px rgba(10, 33, 64, .28); }
+.lp-step--4.lp-step--vivo:hover { box-shadow: 0 16px 40px rgba(90, 0, 40, .22); }
+
+.lp-step--vivo:hover .arte.is-visivel [data-p],
+.lp-step--vivo:hover .arte:not(.is-preparado) [data-p] {
+  transform: translate(
+    calc((var(--ox) - var(--origem-x)) * var(--forca) * 1px),
+    calc((var(--oy) - var(--origem-y)) * var(--forca) * 1px)
+  ) scale(1.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-solcard--vivo:hover .arte [data-p],
+  .lp-step--vivo:hover .arte [data-p],
+  .lp-step--vivo:hover .lp-step__no {
+    transform: none;
+    transition: none;
+  }
+}
 
 /* ── 7. Antes / depois — efeito 05 em effects.css ───────────── */
 .lp-results { background: var(--charcoal); }
@@ -864,9 +986,8 @@ summary {
 
   .lp-hero__grid { grid-template-columns: minmax(0, 1fr); }
 
-  .lp-hero__title { max-width: 13ch; }
-
-  .lp-hero__media { max-width: min(420px, 86vw); }
+  .lp-hero__title,
+  .lp-hero__leadin { max-width: none; }
 
   .lp-reality__grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
 
@@ -898,6 +1019,7 @@ summary {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lp-hero__copy { animation: none; }
+  .lp-hero__copy,
+  .lp-hero__word.is-on { animation: none; }
   .lp-challenge { transition: none; }
 }
